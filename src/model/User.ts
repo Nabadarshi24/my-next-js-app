@@ -40,8 +40,7 @@ const UserSchema = new Schema<User>({
     userRole: {
         type: String,
         required: [true, "User role is required"],
-        trim: true,
-        unique: true
+        trim: true
     },
     firstName: {
         type: String,
