@@ -39,8 +39,8 @@ export async function POST(req: Request) {
         );
       } else {
         existingUserByEmail.password = hasPassword;
-        existingUserByEmail.verifyCode = verifyCode;
-        existingUserByEmail.verifyCodeExpiry = expiryDate;
+        // existingUserByEmail.verifyCode = verifyCode;
+        // existingUserByEmail.verifyCodeExpiry = expiryDate;
 
         await existingUserByEmail.save();
       }
@@ -51,13 +51,13 @@ export async function POST(req: Request) {
       // expiryDate.setHours(expiryDate.getHours() + 1);
 
       const newUser = new UserModel({
-        username,
+        username: firstName.toLowerCase() + "." + lastName.toLowerCase(),
         firstName,
         lastName,
         email,
         password: hasPassword,
-        verifyCode,
-        verifyCodeExpiry: expiryDate,
+        // verifyCode,
+        // verifyCodeExpiry: expiryDate,
         userRole,
         isVerified: false,
         isDeleted: false
@@ -66,16 +66,16 @@ export async function POST(req: Request) {
       await newUser.save();
     }
 
-    const emailResponse = await sendVerificationEmail(email, username, verifyCode);
+    // const emailResponse = await sendVerificationEmail(email, username, verifyCode);
 
-    if (!emailResponse.success) {
-      return Response.json({
-        success: false,
-        message: emailResponse.message
-      },
-        { status: 500 }
-      );
-    }
+    // if (!emailResponse.success) {
+    //   return Response.json({
+    //     success: false,
+    //     message: emailResponse.message
+    //   },
+    //     { status: 500 }
+    //   );
+    // }
 
     return Response.json({
       success: true,
