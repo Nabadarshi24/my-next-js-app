@@ -1,4 +1,5 @@
 import { sendVerificationEmail } from "@/helpers/SendVerificationEmail";
+import { sendWelcomeEmail } from "@/helpers/SendWelcomeEmail";
 import dbConnect from "@/lib/dbConnect";
 import { UserModel } from "@/model/User";
 import bcrypt from 'bcryptjs';
@@ -66,20 +67,22 @@ export async function POST(req: Request) {
       await newUser.save();
     }
 
-    // const emailResponse = await sendVerificationEmail(email, username, verifyCode);
+    const loginUrl = "http://localhost:5173/login";
 
-    // if (!emailResponse.success) {
-    //   return Response.json({
-    //     success: false,
-    //     message: emailResponse.message
-    //   },
-    //     { status: 500 }
-    //   );
-    // }
+    const emailResponse = await sendWelcomeEmail(email, username, loginUrl);
+
+    if (!emailResponse.success) {
+      return Response.json({
+        success: false,
+        message: emailResponse.message
+      },
+        { status: 500 }
+      );
+    }
 
     return Response.json({
       success: true,
-      message: "User registered successfully. Please check your email for verification code."
+      message: "User registered successfully. Please check your email for login link."
     },
       { status: 201 }
     );
